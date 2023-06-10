@@ -1,3 +1,6 @@
+#ifndef PINDEFS_H
+#define PINDEFS_H
+
 /// @file    pindefs.h
 /// @brief   Set pins up and explain the overlap nomenclature between Arduino and the D1 mini
 
@@ -20,11 +23,16 @@
 // Clock pin only needed for SPI based chipsets when not using hardware SPI
 
 
-#define DATA_PIN 3 // Pin 3 in
-#define CLOCK_PIN 13
+#define DATA_PIN 12 // D6 on the ESP board
 
 // If we're using an analog accelerometer, we'll use an analog pin
-#define ACCELEROMETER_PIN A0
+#define ANALOG_ACCELEROMETER_PIN A0
+
+// Not needed to define, but our I2C bus for our LIS3whatever
+//  I2C accelerometer uses
+// 
+//  SDA - D2, or A4 on Arduino Uno, digital 3 on Leonardo/Micro
+//  SCL - D1, or A5 on Arduino Uno, digital 2 on Leonardo/Micro
 
 
 
@@ -37,3 +45,6 @@
 //GPIO1  (TX): pin is high at BOOT, boot failure if pulled LOW
 //GPIO10 (SD3): pin is high at BOOT
 //GPIO9  (SD2): pin is high at BOOT
+
+
+#endif
