@@ -20,7 +20,7 @@ The board we are using can be found in Aruduino under Tools->Board->esp8266->LOL
 NOTE! In order to use this logging code, you have to be running the Legacy 1.x IDE, so you can use the ESP data upload tool.
 Probably not something that will be ultimately necessary for the actual project, just an annoying step for now for data logging
 Currently, just using the Examples -> ESP8266WebServer -> Graph
-Additionally, for the logging demo code, you'll need to install a tool following the instructions here: ```https://arduino-esp8266.readthedocs.io/en/latest/filesystem.html#uploading-files-to-file-system```, get the 
+Additionally, for the logging demo code, you'll need to install a tool following the instructions here: ```https://arduino-esp8266.readthedocs.io/en/latest/filesystem.html#uploading-files-to-file-system```, get the LittleFS code
 
 LED control is impletemented through the [FastLED](https://fastled.io/) package.
 
