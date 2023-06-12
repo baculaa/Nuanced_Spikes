@@ -1,4 +1,4 @@
-/// @file    combo_wombo.ino
+/// @file    NewShoe.ino
 /// @brief   Get data from an accelerometer and make a chain of LEDs on the shoe respond
 
 #include <FastLED.h>
@@ -54,8 +54,11 @@ void setup() {
 void loop() {
   // Read in accelerometer data
   uint32_t avg = 0;
-  if (shouldWeReadAccelerometer(ACCELEROMETER_READ_PERIOD)){
-    struct AccelerometerData aData = readAccelerometer();
+  if (haveNewAccelData())
+  {
+  //if (shouldWeReadAccelerometer(ACCELEROMETER_READ_PERIOD)){
+    //struct AccelerometerData aData = readAccelerometer();
+    struct AccelerometerData aData = currentAccelData;
     
     Serial.print("X:  "); Serial.print(aData.x);
     Serial.print("  \tY:  "); Serial.print(aData.y);
@@ -99,20 +102,20 @@ void loop() {
       // Wait a little bit
       //delay(100);
 
-        if (analogRead(A1) < 200) {
+        if (analogRead(POT_PIN) < 200) {
         // Turn our current led back to black for the next loop around
         leds[whiteLed] = CRGB::Green;
         wait = 900;
         }
-        else if (analogRead(A1) < 400) {
+        else if (analogRead(POT_PIN) < 400) {
         leds[whiteLed] = CRGB::Yellow;
         wait = 700;
         }
-        else if (analogRead(A1) < 600) {
+        else if (analogRead(POT_PIN) < 600) {
         leds[whiteLed] = CRGB::Orange;
         wait = 500;
         }
-        else if (analogRead(A1) < 800) {
+        else if (analogRead(POT_PIN) < 800) {
         leds[whiteLed] = CRGB::OrangeRed;
         wait = 300;
         }
@@ -138,6 +141,7 @@ void loop() {
    }
 //}
 
+/*
 unsigned long g_accel_timer = 0;
 bool shouldWeReadAccelerometer(long readPeriod){
   if (g_accel_timer < millis()){
@@ -148,4 +152,4 @@ bool shouldWeReadAccelerometer(long readPeriod){
     return false;
   }
 }
-
+*/

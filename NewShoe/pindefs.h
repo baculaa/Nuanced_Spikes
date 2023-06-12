@@ -22,18 +22,38 @@
 // ground, and power), like the LPD8806 define both DATA_PIN and CLOCK_PIN
 // Clock pin only needed for SPI based chipsets when not using hardware SPI
 
+// Our single analog pin is saved for the potentiometer, which is the same for arduino and D1 mini
+#define POT_PIN A0
 
-#define DATA_PIN 12 // D6 on the ESP board
-
-// If we're using an analog accelerometer, we'll use an analog pin
-#define ANALOG_ACCELEROMETER_PIN A0
+// Used for software SPI
+#define LIS3DH_CLK 14 // D5 on ESP board
+#define LIS3DH_MISO 12 // D6 on the ESP board
+#define LIS3DH_MOSI 13
+// Used for hardware & software SPI
+#define LIS3DH_CS 15
 
 // LED DAta pin
-#define DATA_PIN 3
+#define DATA_PIN 16
 
 // Ultrasonic pins
-#define TRIG_PIN 9
-#define ECHO_PIN 10
+#define TRIG_PIN 5
+#define ECHO_PIN 4
+
+// If we're using the ESP8266 board, swap some pins for sanity
+#ifndef ESP8266
+#define LIS3DH_CLK D5
+#define LIS3DH_MISO D6
+#define LIS3DH_MOSI D7
+// Used for hardware & software SPI
+#define LIS3DH_CS D8
+
+// LED DAta pin
+#define DATA_PIN D0
+
+// Ultrasonic pins
+#define TRIG_PIN D1
+#define ECHO_PIN D2
+#endif
 
 // Not needed to define, but our I2C bus for our LIS3whatever
 //  I2C accelerometer uses
