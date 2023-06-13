@@ -23,8 +23,10 @@ void setupAccelerometer();
 bool haveNewAccelData();
 //AccelerometerData readAccelerometer();
 
+// SPI accelerometer sensor
+//Adafruit_LIS3DH lis = Adafruit_LIS3DH(LIS3DH_CS, LIS3DH_MOSI, LIS3DH_MISO, LIS3DH_CLK);
 // I2C accelerometer sensor
-Adafruit_LIS3DH lis = Adafruit_LIS3DH(LIS3DH_CS, LIS3DH_MOSI, LIS3DH_MISO, LIS3DH_CLK);
+Adafruit_LIS3DH lis = Adafruit_LIS3DH();
 
 void setupAccelerometer(){
   //if (ANALOG_ACCELEROMETER != 1){

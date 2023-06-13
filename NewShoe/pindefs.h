@@ -25,35 +25,25 @@
 // Our single analog pin is saved for the potentiometer, which is the same for arduino and D1 mini
 #define POT_PIN A0
 
-// Used for software SPI
-#define LIS3DH_CLK 14 // D5 on ESP board
-#define LIS3DH_MISO 12 // D6 on the ESP board
-#define LIS3DH_MOSI 13
+//LIS3DH I2C
+#define LIS3DH_CLK 5 // D1 on ESP board, SCL on LIS3DH
+#define LIS3DH_MOSI 4 // D2 on ESP board, SDA on LIS3DH
+
+// Used for software SPI, LIS3DH communication
+//#define LIS3DH_CLK 14 // D5 on ESP board, SCL on LS3DH
+//#define LIS3DH_MISO 12 // D6 on the ESP board, SDO on LIS3DH
+//#define LIS3DH_MOSI 13 // D7 on the ESP board, SDA on LIS3DH
 // Used for hardware & software SPI
-#define LIS3DH_CS 15
+//#define LIS3DH_CS 15 // D8 on the ESP board, CS on LIS3DH
 
 // LED DAta pin
-#define DATA_PIN 16
+#define DATA_PIN 16 // D0 on the ESP board
 
 // Ultrasonic pins
-#define TRIG_PIN 5
-#define ECHO_PIN 4
+#define TRIG_PIN 14 // D1 on the ESP board
+#define ECHO_PIN 12 //D2 on the ESP board
 
-// If we're using the ESP8266 board, swap some pins for sanity
-#ifndef ESP8266
-#define LIS3DH_CLK D5
-#define LIS3DH_MISO D6
-#define LIS3DH_MOSI D7
-// Used for hardware & software SPI
-#define LIS3DH_CS D8
 
-// LED DAta pin
-#define DATA_PIN D0
-
-// Ultrasonic pins
-#define TRIG_PIN D1
-#define ECHO_PIN D2
-#endif
 
 // Not needed to define, but our I2C bus for our LIS3whatever
 //  I2C accelerometer uses
