@@ -51,5 +51,11 @@ Din  |   |  Dout
 - Using the [Raspberry Pi Imager](https://www.raspberrypi.com/software/), select Raspberry Pi OS (other) -> Raspberry Pi OS (64-bit) and write that to the SD card
 - Setup Rasbperry Pi as normal, I set user=raspi, pw=pi, set region to United States and/or click the US keyboard layout button, let it update
 - Install opencv by opening a terminal and using `pip3 install opencv-python` (Note: make sure to use **pip3**, regular pip won't find a precomplied version, try to compile from source, then fail after many hours)
+-  Install the zenoh python package `
+-  Install the zenoh server: 
+```
+echo "deb [trusted=yes] https://download.eclipse.org/zenoh/debian-repo/ /" | sudo tee -a /etc/apt/sources.list > /dev/null
+sudo apt update
+sudo apt install zenoh 
+```
 - [Set up the Pi as a WiFi Access Point (AP)](https://www.raspberrypi.com/documentation/computers/configuration.html#setting-up-a-routed-wireless-access-point) - more details are in the Raspberry Pi Code\WiFiSetup.md, if you need more details
--  
