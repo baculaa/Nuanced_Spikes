@@ -1,9 +1,13 @@
 /// @file    NSpikeShoe.ino
 /// @brief   Get data from an accelerometer and make a chain of LEDs on the shoe respond
 
+// GLOBAL VARIABLES
+uint8_t gHue = 0;
+
 #include <FastLED.h>
 #include "pindefs.h"
 #include "accelerometerCode.h"
+#include "MQTTFunctions.h"
 
 // How many leds in your strip?
 #define NUM_LEDS 1
@@ -42,8 +46,10 @@ void setup() {
   }
 
   // Set up LEDs
-     FastLED.addLeds<WS2811, DATA_PIN, RGB>(leds, NUM_LEDS);
+  FastLED.addLeds<WS2811, DATA_PIN, RGB>(leds, NUM_LEDS);
  
+  // Set up MQTT
+  setupMQTT();
 }
 
 
@@ -78,10 +84,20 @@ void loop() {
     avg = sum / RUNNING_ARRAY_SIZE;
     Serial.print("Average: ");
     Serial.println(avg);
-
+    char buffer [5];
+    itoa(avg, buffer, 10);
+     mqttClient.publish("IROS/accelerometer", 0, true, buffer);
   }
   // Write LEDs
-  uint8_t hue = avg / 4; // divided by 4, since we're currently using an analog read that goes 0-1024
+  ///uint8_t hue = avg / 4; // divided by 4, since we're currently using an analog read that goes 0-1024
+  delay(1000);
+  uint8_t hue = gHue;
+  Serial.print ("gHue: ");
+  Serial.println(gHue, HEX);
+  Serial.print ("Hue: ");
+  Serial.println(hue, HEX);
+  leds[0]= CHSV( hue, 255, 50);
+  FastLED.show();
   // Turn the LED on and off on a 1 second cycle
   if (g_timer_0 >= millis() + CYCLE_TIME / 2){
     leds[0]= CHSV( hue, 255, 50);
@@ -90,7 +106,7 @@ void loop() {
   }
   else if (g_timer_0 >= millis()){
     digitalWrite(13, LOW);
-    leds[0] = CRGB::Black;
+    leds[0]= CHSV( hue, 255, 50);
     FastLED.show();
   }
   else {
