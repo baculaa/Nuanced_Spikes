@@ -22,6 +22,22 @@
 // ground, and power), like the LPD8806 define both DATA_PIN and CLOCK_PIN
 // Clock pin only needed for SPI based chipsets when not using hardware SPI
 
+////////////////////////////////////////////
+// Full boot wedge wiring pin wiring list
+///////////////////////////////////////////
+// D1 Mini | LIS3DH | Ultrasonic | LED1 | PowerBoost100C | Battery | Switch |
+// --------|--------|------------|------|----------------|---------|--------|
+//    5V   |  Vin   |     VCC    | Vin  |      5V        | ------- | ------ |
+//    G    |  GND   |     Gnd    | GND  | -------------- | ------- | Pin 1  |
+//    D1   |  SCL   | ---------- | ---- | -------------- | ------- | ------ |
+//    D2   |  SDA   | ---------- | ---- | -------------- | ------- | ------ |
+//    D5   | ------ |    TRIG    | ---- | -------------- | ------- | ------ |
+//    D6   | ------ |    ECHO    | ---- | -------------- | ------- | ------ |
+//    D7   | ------ | ---------- | Din  | -------------- | ------- | ------ |
+// ------- | ------ | ---------- | ---- |      Bat       |  Vout   | ------ |
+// ------- | ------ | ---------- | ---- |      GND       |   GND   | Common |
+// ------- | ------ | ---------- | ---- | -------------- | ------- | ------ |
+
 // Our single analog pin is saved for the potentiometer, which is the same for arduino and D1 mini
 #define POT_PIN A0
 
