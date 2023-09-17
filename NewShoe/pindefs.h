@@ -26,8 +26,8 @@
 #define POT_PIN A0
 
 //LIS3DH I2C
-#define LIS3DH_CLK 5 // D1 on ESP board, SCL on LIS3DH
-#define LIS3DH_MOSI 4 // D2 on ESP board, SDA on LIS3DH
+#define LIS3DH_CLK D1 // D1 on ESP board, SCL on LIS3DH
+#define LIS3DH_MOSI D2 // D2 on ESP board, SDA on LIS3DH
 
 // Used for software SPI, LIS3DH communication
 //#define LIS3DH_CLK 14 // D5 on ESP board, SCL on LS3DH
@@ -37,11 +37,11 @@
 //#define LIS3DH_CS 15 // D8 on the ESP board, CS on LIS3DH
 
 // LED DAta pin
-#define DATA_PIN 16 // D0 on the ESP board
+#define DATA_PIN D7 // D0 on the ESP board
 
 // Ultrasonic pins
-#define TRIG_PIN 14 // D1 on the ESP board
-#define ECHO_PIN 12 //D2 on the ESP board
+#define TRIG_PIN D5 // D1 on the ESP board
+#define ECHO_PIN D6 //D2 on the ESP board
 
 
 

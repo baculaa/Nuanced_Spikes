@@ -20,6 +20,11 @@ unsigned long g_timer_0 = 0;
 float duration, distance;
 int wait;
 int flag;
+int color;
+int sat;
+int bright;
+int bright2;
+float prev_dist;
 
 CRGB leds[NUM_LEDS];
 
@@ -39,7 +44,7 @@ void setup() {
 
   Serial.begin(9600);
   Serial.println("Starting up...");
-
+  prev_dist = 0;
   setupAccelerometer();
 
   // initialize our running array
@@ -97,46 +102,75 @@ void loop() {
 //      leds[whiteLed] = CRGB::Violet;
 
       // Show the leds (only one of which is set to white, from above)
-      FastLED.show();
+      
 
       // Wait a little bit
       //delay(100);
-
+        sat = 255;
+        bright = 150;
         if (analogRead(POT_PIN) < 200) {
         // Turn our current led back to black for the next loop around
-        leds[whiteLed] = CRGB::Green;
+        color = 96;
+        bright2 = 100;
+        leds[whiteLed] = CHSV(color, sat, bright);
         wait = 900;
         }
         else if (analogRead(POT_PIN) < 400) {
-        leds[whiteLed] = CRGB::Yellow;
+        color = 64;
+        bright2 = 75;
+        leds[whiteLed] = CHSV(color, sat, bright);
         wait = 700;
         }
         else if (analogRead(POT_PIN) < 600) {
-        leds[whiteLed] = CRGB::Orange;
+        color = 40;
+        bright2 = 50;
+        leds[whiteLed] = CHSV(color, sat, bright);
         wait = 500;
         }
         else if (analogRead(POT_PIN) < 800) {
-        leds[whiteLed] = CRGB::OrangeRed;
+        color = 20;
+        bright2 = 25;
+        leds[whiteLed] = CHSV(color, sat, bright);
         wait = 300;
         }
         else{
-          leds[whiteLed] = CRGB::Red;
+          color = 0;
+          bright2 = 0;
+          leds[whiteLed] = CHSV(color, sat, bright);
           wait = 100;
         }
-       
-     
       }
+      FastLED.show();
+      delay(wait);
       flag = 0;
-      
-       Serial.println(distance);
-       if (distance < 50){
-        for(int whiteLed = 0; whiteLed < NUM_LEDS; whiteLed = whiteLed + 1) {
-         leds[whiteLed] = CRGB::Black;
-         flag = 1;
-        }
-         delay(wait);
-      }
+      /// DESIRED OUTPUT: BLINK AT VARIABLE RATE FOR PROXIMITY DETECTIION
+      struct AccelerometerData aData = currentAccelData;
 
+       if (distance < 50){
+        if (distance > 15){
+//          if (abs(distance-prev_dist) < 55){
+            Serial.print("Distance dif: ");
+            Serial.println(distance);
+            for(int whiteLed = 0; whiteLed < NUM_LEDS; whiteLed = whiteLed + 1) {
+            leds[whiteLed] = CHSV(color, sat, bright2);
+            } 
+        }
+//        }
+       }
+      /// AND BLINK AT FIXED RATE FOR STOMP 
+      if (aData.z > 10){
+        Serial.print("Here");
+        for(int whiteLed = 0; whiteLed < NUM_LEDS; whiteLed = whiteLed + 1) {
+         bright = 255;
+         leds[whiteLed] = CHSV(color, sat, bright); 
+        }
+         wait = 100;
+      }
+      FastLED.show();
+      delay(wait);
+      Serial.print("Brightness: ");
+      Serial.println(bright);
+      prev_dist = distance;
       
    }
 //}
