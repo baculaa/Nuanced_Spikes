@@ -142,6 +142,8 @@ def visualize(image, results, box_color=(0, 255, 0), text_color=(0, 0, 255), fps
 
     return output
 
+
+
 if __name__ == '__main__':
     backend_id = backend_target_pairs[args.backend_target][0]
     target_id = backend_target_pairs[args.backend_target][1]
@@ -183,8 +185,8 @@ if __name__ == '__main__':
             print("Could not connect camera: {}".format(cameraNameList[i]))
             del captureList[-1]
 
-    if len(captureList) < 2:
-        print("Did not connect to all cameras: {} connected".format(len(captureList)))
+    if len(captureList) < 1:
+        print("Did not connect to any cameras: {} connected".format(len(captureList)))
         for cap in captureList:
             cap.release()
         sys.exit()
@@ -239,22 +241,34 @@ if __name__ == '__main__':
         # We read this twice, first to empty the buffer, second so we get fresh data from the camera
         while (i < 2):
             i += 1
-            hasFrame, frame0 = captureList[0].read()
-            hasFrame1, frame1 = captureList[1].read()
-            hasFrame2, frame2 = captureList[2].read()
-            hasFrame3, frame3 = captureList[3].read()
+            hasFrames = []
+            frames = []
+            for cap in captureList:
+                hasFrame, frame0 = cap.read()
+                hasFrames.append(hasFrame)
+                frames.append(frame0)
+            # hasFrame, frame0 = captureList[0].read()
+            # hasFrame1, frame1 = captureList[1].read()
+            # hasFrame2, frame2 = captureList[2].read()
+            # hasFrame3, frame3 = captureList[3].read()
             # hasFrame, frame0 = cap0.read()
             # hasFrame1, frame1 = cap1.read()
             # hasFrame2, frame2 = cap2.read()
-        if not (hasFrame and hasFrame1 and hasFrame2 and hasFrame3):
-            print('No frames grabbed!')
+        noFrames = False
+        for hasFrame in hasFrames:
+            if not (hasFrame and hasFrame1 and hasFrame2 and hasFrame3):
+                print('No frames grabbed!')
+                noFrames = True
+                break
+        if(noFrames):
             break
         timeElapsed = time.perf_counter() - perfCounter
         print("   Time Elapsed: ", timeElapsed)
         
         print(" Image Concatenation")
         perfCounter = time.perf_counter()
-        vis = cv.hconcat([frame0, frame1, frame2, frame3])
+        #vis = cv.hconcat([frame0, frame1, frame2, frame3])
+        vis = cv.hconcat(frames)
         timeElapsed = time.perf_counter() - perfCounter
         print("   Time Elapsed: ", timeElapsed)
         
