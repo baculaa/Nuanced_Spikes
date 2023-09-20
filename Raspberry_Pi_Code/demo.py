@@ -256,7 +256,8 @@ if __name__ == '__main__':
             # hasFrame2, frame2 = cap2.read()
         noFrames = False
         for hasFrame in hasFrames:
-            if not (hasFrame and hasFrame1 and hasFrame2 and hasFrame3):
+            #if not (hasFrame and hasFrame1 and hasFrame2 and hasFrame3):
+            if not hasFrame:
                 print('No frames grabbed!')
                 noFrames = True
                 break
