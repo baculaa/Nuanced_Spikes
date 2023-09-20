@@ -177,7 +177,6 @@ if __name__ == '__main__':
         print(camera)
         cameraNameList.append(camera)
         
-        
     print("Connecting cameras...")
     for i in range(len(cameraNameList)):
         captureList.append(cv.VideoCapture(cameraNameList[i]))
@@ -264,29 +263,29 @@ if __name__ == '__main__':
         if(noFrames):
             break
         timeElapsed = time.perf_counter() - perfCounter
-        print("   Time Elapsed: ", timeElapsed)
+        # print("   Time Elapsed: ", timeElapsed)
         
-        print(" Image Concatenation")
+        # print(" Image Concatenation")
         perfCounter = time.perf_counter()
         #vis = cv.hconcat([frame0, frame1, frame2, frame3])
         vis = cv.hconcat(frames)
         timeElapsed = time.perf_counter() - perfCounter
-        print("   Time Elapsed: ", timeElapsed)
+        # print("   Time Elapsed: ", timeElapsed)
         
-        print("resizing")
+        # print("resizing")
         newSize = CombinedSize
         resized = cv.resize(vis, CombinedSize, interpolation = cv.INTER_LINEAR)
         timeElapsed = time.perf_counter() - perfCounter
-        print("   Time Elapsed: ", timeElapsed)
+        # print("   Time Elapsed: ", timeElapsed)
         
-        # Inference
-        print ("Inference")
+        # # Inference
+        # print ("Inference")
         perfCounter = time.perf_counter()
         tm.start()
         results = model.infer(resized) # results is a tuple
         tm.stop()
         timeElapsed = time.perf_counter() - perfCounter
-        print("   Time Elapsed: ", timeElapsed)
+        # print("   Time Elapsed: ", timeElapsed)
         
         # Did we see a face?
         currentFaceDetection = checkForFaces(results)
@@ -297,6 +296,7 @@ if __name__ == '__main__':
             loopTimer = time.time()
             lastFaceDetection = True
             #tell the world we had a face
+            print("Sending that there's a person!")
             MQTTpublisher.single(DistanceTopic, TooCloseHue, hostname=MQTTServerIP)
         
         # Face stays detected
@@ -311,25 +311,26 @@ if __name__ == '__main__':
             if (time.time() - loopTimer >  FaceTimeout):
                 
                 # once timeout is expired, send a message
+                print("Sending that the person is gone!")
                 MQTTpublisher.single(DistanceTopic, NormalHue, hostname=MQTTServerIP)
                 # set our flags
                 lastFaceDetection = False
         
 
         
-        print("drawing visualizations")
-        perfCounter = time.perf_counter()
-        # Draw results on the input image
-        resized = visualize(resized, results, fps=tm.getFPS())
-        timeElapsed = time.perf_counter() - perfCounter
-        print("   Time Elapsed: ", timeElapsed)
+        # print("drawing visualizations")
+        # perfCounter = time.perf_counter()
+        # # Draw results on the input image
+        # resized = visualize(resized, results, fps=tm.getFPS())
+        # timeElapsed = time.perf_counter() - perfCounter
+        # print("   Time Elapsed: ", timeElapsed)
         
-        print("drawing to screen")
-        perfCounter = time.perf_counter()
-        # Visualize results in a new Window
+        # print("drawing to screen")
+        # perfCounter = time.perf_counter()
+        # # Visualize results in a new Window
         # cv.imshow('YuNet Demo', resized)
-        timeElapsed = time.perf_counter() - perfCounter
-        print("   Time Elapsed: ", timeElapsed)
+        # timeElapsed = time.perf_counter() - perfCounter
+        # print("   Time Elapsed: ", timeElapsed)
         
         tm.reset()
         
