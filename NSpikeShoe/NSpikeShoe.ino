@@ -180,7 +180,7 @@ void loop() {
 
 
 
-       if (distance){
+       if (hue > 99){
         
 //          if (abs(distance-prev_dist) < 55){
             Serial.print("Distance dif: ");
