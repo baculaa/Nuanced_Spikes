@@ -168,15 +168,24 @@ if __name__ == '__main__':
     deviceId = 0
     cameraNameList = []
     captureList = []
-    while (len(captureList) <= 4):
-        print("Finding cameras...")
-        for camera in glob.glob("/dev/video?"):
-            print(camera)
-            cap = cv.VideoCapture(camera)
-            if (cap.isOpened()):
-                captureList.append(cap)
-            cameraNameList.append(camera)
+    
         
+    for camera in glob.glob("/dev/video?"):
+        print(camera)
+        cameraNameList.append(camera)
+        
+        
+    print("Connecting cameras...")
+    for camera in cameraNameList:
+        cap = cv.VideoCapture(camera)
+        if (cap.isOpened()):
+            captureList.append(cap)
+
+    if len(captureList) < 4:
+        print("Did not connect to all cameras")
+        for cap in captureList:
+            cap.release()
+    #while (len(captureList) <= 4):
     # cap0 = cv.VideoCapture(cameraNameList[1])
     # while (not cap0.isOpened()):
     #     x = True
