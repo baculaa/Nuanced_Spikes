@@ -46,7 +46,7 @@ PotVal = 100
 
 Magnification = .75
 
-CombinedSize = ( int(Magnification *  (CaptureWidth * 4)), int(Magnification * CaptureHeight))
+
 
 from yunet import YuNet
 
@@ -180,13 +180,16 @@ if __name__ == '__main__':
     for i in range(len(cameraNameList)):
         captureList.append(cv.VideoCapture(cameraNameList[i]))
         if (not captureList[-1].isOpened()):
+            print("Could not connect camera: {}".format(cameraNameList[i]))
             del captureList[-1]
 
-    if len(captureList) < 4:
+    if len(captureList) < 2:
         print("Did not connect to all cameras: {} connected".format(len(captureList)))
         for cap in captureList:
             cap.release()
         sys.exit()
+
+    CombinedSize = ( int(Magnification *  (CaptureWidth * len(captureList))), int(Magnification * CaptureHeight))
     #while (len(captureList) <= 4):
     # cap0 = cv.VideoCapture(cameraNameList[1])
     # while (not cap0.isOpened()):
@@ -219,6 +222,8 @@ if __name__ == '__main__':
 
 
     model.setInputSize([CombinedSize[0], CombinedSize[1]])
+    hasFrames = []
+    frames = []
 
     #timer for tracking face detection timeouts
     loopTimer = time.time()
