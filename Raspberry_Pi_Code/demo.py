@@ -10,6 +10,7 @@ import numpy as np
 import cv2 as cv
 import glob
 import time
+import sys
 import paho.mqtt.client as mqtt
 import paho.mqtt.publish as MQTTpublisher
 
@@ -185,7 +186,7 @@ if __name__ == '__main__':
         print("Did not connect to all cameras: {} connected".format(len(captureList)))
         for cap in captureList:
             cap.release()
-        return
+        sys.exit()
     #while (len(captureList) <= 4):
     # cap0 = cv.VideoCapture(cameraNameList[1])
     # while (not cap0.isOpened()):
