@@ -16,6 +16,15 @@ uint8_t gHue = 0;
 #define ACCELEROMETER_READ_PERIOD 20
 //Global timers for keeping track of loop things
 unsigned long g_timer_0 = 0;
+
+float duration, distance;
+int wait;
+int flag;
+int color;
+int sat;
+int bright;
+int bright2;
+float prev_dist;
 // Cycle for LED blinking
 #define CYCLE_TIME 100
 
@@ -59,7 +68,7 @@ void setup() {
 
 
 //Global timers for keeping track of loop things
-unsigned long g_timer_0 = 0;
+//unsigned long g_timer_0 = 0;
 // Cycle for LED blinking
 #define CYCLE_TIME 100
 
@@ -167,7 +176,7 @@ void loop() {
 //  else {
 //    g_timer_0 = millis() + CYCLE_TIME;
 //  }
-}
+
 
 
 
