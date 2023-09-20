@@ -177,7 +177,7 @@ if __name__ == '__main__':
         
         
     print("Connecting cameras...")
-    for i in len(cameraNameList):
+    for i in range(len(cameraNameList)):
         captureList.append(cv.VideoCapture(cameraNameList[i]))
         if (not captureList[-1].isOpened()):
             del captureList[-1]
