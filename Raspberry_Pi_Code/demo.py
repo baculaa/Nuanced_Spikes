@@ -232,9 +232,9 @@ if __name__ == '__main__':
     
     #timer for opencv
     tm = cv.TickMeter()
+    print("reading cameras")
     while cv.waitKey(1) < 0:
         
-        print("reading cameras")
         perfCounter = time.perf_counter()
         i = 0
         # We read this twice, first to empty the buffer, second so we get fresh data from the camera
