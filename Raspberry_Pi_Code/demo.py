@@ -327,7 +327,7 @@ if __name__ == '__main__':
         print("drawing to screen")
         perfCounter = time.perf_counter()
         # Visualize results in a new Window
-        cv.imshow('YuNet Demo', resized)
+        # cv.imshow('YuNet Demo', resized)
         timeElapsed = time.perf_counter() - perfCounter
         print("   Time Elapsed: ", timeElapsed)
         
