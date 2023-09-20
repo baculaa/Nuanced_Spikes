@@ -177,10 +177,10 @@ if __name__ == '__main__':
         
         
     print("Connecting cameras...")
-    for camera in cameraNameList:
-        cap = cv.VideoCapture(camera)
-        if (cap.isOpened()):
-            captureList.append(cap)
+    for i in len(cameraNameList):
+        captureList.append(cv.VideoCapture(cameraNameList[i]))
+        if (not captureList[-1].isOpened()):
+            del captureList[-1]
 
     if len(captureList) < 4:
         print("Did not connect to all cameras: {} connected".format(len(captureList)))
