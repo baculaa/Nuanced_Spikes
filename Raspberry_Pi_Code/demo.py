@@ -16,6 +16,14 @@ import paho.mqtt.publish as MQTTpublisher
 MQTTServerIP = "127.0.0.1"
 MQTTPort = 1883
 
+# Topics
+# Accel
+AccelTopic = "IROS/accel"
+# Distance
+DistanceTopic = "IROS/hue"
+# Potentiometer
+PotTopic = "IROS/pot"
+
 CaptureWidth = 800
 CaptureHeight = 480
 
@@ -27,14 +35,17 @@ FaceMaxHeight = 80
 #  FaceTimeout seconds
 FaceTimeout = 1.5
 
+# Distance detection value
 TooCloseHue = 100
 NormalHue = 30
 
+# Then we also need potentiometer value (0-255, from other d1mini)
+PotVal = 100
 
 
 Magnification = .75
 
-CombinedSize = ( int(Magnification *  (CaptureWidth * 3)), int(Magnification * CaptureHeight))
+CombinedSize = ( int(Magnification *  (CaptureWidth * 4)), int(Magnification * CaptureHeight))
 
 from yunet import YuNet
 
@@ -156,27 +167,33 @@ if __name__ == '__main__':
     # Omit input to call default camera
     deviceId = 0
     cameraNameList = []
-    for camera in glob.glob("/dev/video?"):
-        print(camera)
-        cameraNameList.append(camera)
-        
-    cap0 = cv.VideoCapture(cameraNameList[1])
-    while (not cap0.isOpened()):
-        x = True
-    cap1 = cv.VideoCapture(cameraNameList[3])
-    while (not cap1.isOpened()):
-        x = True
-    cap2 = cv.VideoCapture(cameraNameList[5])
-    while (not cap2.isOpened()):
-        x = True
-    
     captureList = []
+    while (len(captureList) <= 4):
+        print("Finding cameras...")
+        for camera in glob.glob("/dev/video?"):
+            print(camera)
+            cap = cv.VideoCapture(camera)
+            if (cap.isOpened()):
+                captureList.append(cap)
+            cameraNameList.append(camera)
+        
+    # cap0 = cv.VideoCapture(cameraNameList[1])
+    # while (not cap0.isOpened()):
+    #     x = True
+    # cap1 = cv.VideoCapture(cameraNameList[3])
+    # while (not cap1.isOpened()):
+    #     x = True
+    # cap2 = cv.VideoCapture(cameraNameList[5])
+    # while (not cap2.isOpened()):
+    #     x = True
     
-    captureList.append(cap0)
-    captureList.append(cap1)
-    captureList.append(cap2)
+    # captureList = []
+    # captureList.append(cap0)
+    # captureList.append(cap1)
+    # captureList.append(cap2)
     print("Buffer size")
-    print(cap0.get(cv.CAP_PROP_BUFFERSIZE))
+    # print(cap0.get(cv.CAP_PROP_BUFFERSIZE))
+    print(captureList[0].get(cv.CAP_PROP_BUFFERSIZE))
     
     for cap in captureList:
         cap.set(cv.CAP_PROP_FRAME_WIDTH, CaptureWidth)
@@ -186,7 +203,8 @@ if __name__ == '__main__':
         cap.set(cv.CAP_PROP_BUFFERSIZE, 1)
     
     print("Buffer size")
-    print(cap0.get(cv.CAP_PROP_BUFFERSIZE))
+    # print(cap0.get(cv.CAP_PROP_BUFFERSIZE))
+    print(captureList[0].get(cv.CAP_PROP_BUFFERSIZE))
 
 
     model.setInputSize([CombinedSize[0], CombinedSize[1]])
@@ -205,10 +223,14 @@ if __name__ == '__main__':
         # We read this twice, first to empty the buffer, second so we get fresh data from the camera
         while (i < 2):
             i += 1
-            hasFrame, frame0 = cap0.read()
-            hasFrame1, frame1 = cap1.read()
-            hasFrame2, frame2 = cap2.read()
-        if not (hasFrame and hasFrame1 and hasFrame2):
+            hasFrame, frame0 = captureList[0].read()
+            hasFrame1, frame1 = captureList[1].read()
+            hasFrame2, frame2 = captureList[2].read()
+            hasFrame3, frame3 = captureList[3].read()
+            # hasFrame, frame0 = cap0.read()
+            # hasFrame1, frame1 = cap1.read()
+            # hasFrame2, frame2 = cap2.read()
+        if not (hasFrame and hasFrame1 and hasFrame2 and hasFrame3):
             print('No frames grabbed!')
             break
         timeElapsed = time.perf_counter() - perfCounter
@@ -216,7 +238,7 @@ if __name__ == '__main__':
         
         print(" Image Concatenation")
         perfCounter = time.perf_counter()
-        vis = cv.hconcat([frame0, frame1, frame2])
+        vis = cv.hconcat([frame0, frame1, frame2, frame3])
         timeElapsed = time.perf_counter() - perfCounter
         print("   Time Elapsed: ", timeElapsed)
         
@@ -244,7 +266,7 @@ if __name__ == '__main__':
             loopTimer = time.time()
             lastFaceDetection = True
             #tell the world we had a face
-            MQTTpublisher.single("IROS/hue", TooCloseHue, hostname=MQTTServerIP)
+            MQTTpublisher.single(DistanceTopic, TooCloseHue, hostname=MQTTServerIP)
         
         # Face stays detected
         elif (lastFaceDetection == True and currentFaceDetection == True):
@@ -258,7 +280,7 @@ if __name__ == '__main__':
             if (time.time() - loopTimer >  FaceTimeout):
                 
                 # once timeout is expired, send a message
-                MQTTpublisher.single("IROS/hue", NormalHue, hostname=MQTTServerIP)
+                MQTTpublisher.single(DistanceTopic, NormalHue, hostname=MQTTServerIP)
                 # set our flags
                 lastFaceDetection = False
         
@@ -285,9 +307,11 @@ if __name__ == '__main__':
             break
             
     # out of the main loop, release cameras
-    cap0.release()
-    cap1.release()
-    cap2.release()
+    for cap in captureList:
+        cap.release()
+    # cap0.release()
+    # cap1.release()
+    # cap2.release()
 
     # and close the window
     cv.destroyAllWindows()
