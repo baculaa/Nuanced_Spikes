@@ -182,9 +182,10 @@ if __name__ == '__main__':
             captureList.append(cap)
 
     if len(captureList) < 4:
-        print("Did not connect to all cameras")
+        print("Did not connect to all cameras: {} connected".format(len(captureList)))
         for cap in captureList:
             cap.release()
+        return
     #while (len(captureList) <= 4):
     # cap0 = cv.VideoCapture(cameraNameList[1])
     # while (not cap0.isOpened()):
