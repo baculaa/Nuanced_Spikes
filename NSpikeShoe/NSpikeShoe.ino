@@ -10,10 +10,24 @@ uint8_t gHue = 0;
 #include "MQTTFunctions.h"
 
 // How many leds in your strip?
-#define NUM_LEDS 1
+#define NUM_LEDS 32
 
 // how many milliseconds between accelerometer reads
 #define ACCELEROMETER_READ_PERIOD 20
+//Global timers for keeping track of loop things
+unsigned long g_timer_0 = 0;
+
+float duration, distance;
+int wait;
+int flag;
+int color;
+int sat;
+int bright;
+int bright2;
+float prev_dist;
+// Cycle for LED blinking
+#define CYCLE_TIME 100
+
 
 
 //
@@ -54,7 +68,7 @@ void setup() {
 
 
 //Global timers for keeping track of loop things
-unsigned long g_timer_0 = 0;
+//unsigned long g_timer_0 = 0;
 // Cycle for LED blinking
 #define CYCLE_TIME 100
 
@@ -63,8 +77,11 @@ void loop() {
 
   // Read in accelerometer data
   uint32_t avg = 0;
-  if (shouldWeReadAccelerometer(ACCELEROMETER_READ_PERIOD)){
-    struct AccelerometerData aData = readAccelerometer();
+   if (haveNewAccelData())
+   {
+  //if (shouldWeReadAccelerometer(ACCELEROMETER_READ_PERIOD)){
+    //struct AccelerometerData aData = readAccelerometer();
+    struct AccelerometerData aData = currentAccelData;
     
     Serial.print("X:  "); Serial.print(aData.x);
     Serial.print("  \tY:  "); Serial.print(aData.y);
@@ -96,23 +113,100 @@ void loop() {
   Serial.println(gHue, HEX);
   Serial.print ("Hue: ");
   Serial.println(hue, HEX);
-  leds[0]= CHSV( hue, 255, 50);
+
+  // Using hue instead of color, which we get from our mqtt topic! now we gotta set all the leds
+  // and do what we wanna do with the stomp bit
+
+  for(int whiteLed = 0; whiteLed < NUM_LEDS; whiteLed = whiteLed + 1) {
+      // Turn our current led on to white, then show the leds
+//      leds[whiteLed] = CRGB::Violet;
+
+      // Show the leds (only one of which is set to white, from above)
+      
+
+      // Wait a little bit
+      //delay(100);
+        sat = 255;
+        bright = 150;
+        if (hue < 50) {
+        // Turn our current led back to black for the next loop around
+//        color = 96;
+        bright2 = 100;
+        leds[whiteLed] = CHSV(hue, sat, bright);
+        wait = 900;
+        }
+        else if (hue < 100) {
+//        color = 64;
+        bright2 = 75;
+        leds[whiteLed] = CHSV(hue, sat, bright);
+        wait = 700;
+        }
+        else if (hue < 150) {
+//        color = 40;
+        bright2 = 50;
+        leds[whiteLed] = CHSV(hue, sat, bright);
+        wait = 500;
+        }
+        else if (hue < 200) {
+//        color = 20;
+        bright2 = 25;
+        leds[whiteLed] = CHSV(hue, sat, bright);
+        wait = 300;
+        }
+        else{
+          color = 0;
+          bright2 = 0;
+          leds[whiteLed] = CHSV(color, sat, bright);
+          wait = 100;
+        }
+      }
   FastLED.show();
-  // Turn the LED on and off on a 1 second cycle
-  if (g_timer_0 >= millis() + CYCLE_TIME / 2){
-    leds[0]= CHSV( hue, 255, 50);
-    FastLED.show();
-    digitalWrite(13, HIGH);
-  }
-  else if (g_timer_0 >= millis()){
-    digitalWrite(13, LOW);
-    leds[0]= CHSV( hue, 255, 50);
-    FastLED.show();
-  }
-  else {
-    g_timer_0 = millis() + CYCLE_TIME;
-  }
-}
+  delay(wait);
+//  // Turn the LED on and off on a 1 second cycle
+//  if (g_timer_0 >= millis() + CYCLE_TIME / 2){
+//    leds[0]= CHSV( hue, 255, 50);
+//    FastLED.show();
+//    digitalWrite(13, HIGH);
+//  }
+//  else if (g_timer_0 >= millis()){
+//    digitalWrite(13, LOW);
+//    leds[0]= CHSV( hue, 255, 50);
+//    FastLED.show();
+//  }
+//  else {
+//    g_timer_0 = millis() + CYCLE_TIME;
+//  }
+
+
+
+
+       if (hue > 99){
+        
+//          if (abs(distance-prev_dist) < 55){
+            Serial.print("Distance dif: ");
+            Serial.println(distance);
+            for(int whiteLed = 0; whiteLed < NUM_LEDS; whiteLed = whiteLed + 1) {
+            leds[whiteLed] = CHSV(hue, sat, bright2);
+            } 
+//        }
+       }
+      /// AND BLINK AT FIXED RATE FOR STOMP 
+       struct AccelerometerData aData = currentAccelData;
+      if (aData.z > 10){
+//        Serial.print("Here");
+        for(int whiteLed = 0; whiteLed < NUM_LEDS; whiteLed = whiteLed + 1) {
+         bright = 255;
+         leds[whiteLed] = CHSV(hue, sat, bright); 
+        }
+         wait = 100;
+      }
+      FastLED.show();
+      delay(wait);
+      Serial.print("Brightness: ");
+      Serial.println(bright);
+      prev_dist = distance;
+      
+   }
 
 unsigned long g_accel_timer = 0;
 bool shouldWeReadAccelerometer(long readPeriod){

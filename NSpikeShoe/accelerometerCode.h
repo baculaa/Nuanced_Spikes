@@ -8,7 +8,7 @@
 
 
 // Set to zero if using the I2C accelerometer
-bool ANALOG_ACCELEROMETER = 0;
+//bool ANALOG_ACCELEROMETER = 0;
 
 struct AccelerometerData {
   int x;
@@ -17,16 +17,20 @@ struct AccelerometerData {
 };
 
 void setupAccelerometer();
-AccelerometerData readAccelerometer();
+bool haveNewAccelData();
+//AccelerometerData readAccelerometer();
 
+// SPI accelerometer sensor
+//Adafruit_LIS3DH lis = Adafruit_LIS3DH(LIS3DH_CS, LIS3DH_MOSI, LIS3DH_MISO, LIS3DH_CLK);
 // I2C accelerometer sensor
 Adafruit_LIS3DH lis = Adafruit_LIS3DH();
 
 void setupAccelerometer(){
-  if (ANALOG_ACCELEROMETER != 1){
+  //if (ANALOG_ACCELEROMETER != 1){
     if (! lis.begin(0x18)) {   // change this to 0x19 for alternative i2c address
       Serial.println("Couldnt start I2C accelerometer, defaulting to analog read");
-      ANALOG_ACCELEROMETER = 1;
+      //ANALOG_ACCELEROMETER = 1;
+      while (1) yield();
     }
     else{
       Serial.println("LIS3DH found!");
@@ -36,9 +40,24 @@ void setupAccelerometer(){
       Serial.print("Range = "); Serial.print(2 << lis.getRange());  
       Serial.println("G");
     }
-  }
+  //}
 }
 
+bool haveNewAccelData(){
+  /* Or....get a new sensor event, normalized */
+  sensors_event_t event;
+  if (lis.getEvent(&event)) {
+    struct AccelerometerData data;
+    data.x = event.acceleration.x;
+    data.y = event.acceleration.y;
+    data.z = event.acceleration.z;
+    currentAccelData = data;
+    return true;
+    }
+    else {return false;}
+}
+
+/*
 AccelerometerData readAccelerometer(){
   struct AccelerometerData data;
   if (ANALOG_ACCELEROMETER != 1){
@@ -53,6 +72,7 @@ AccelerometerData readAccelerometer(){
   
   return data;
 }
+*/
 
 
 #endif
