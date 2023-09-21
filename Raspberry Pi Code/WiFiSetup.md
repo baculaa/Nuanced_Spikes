@@ -1,9 +1,16 @@
 # Nuanced_Spikes - Raspberry Pi WiFi AP Configuration
 
+Alternate option - follow the instructions here:
+https://www.tomshardware.com/how-to/raspberry-pi-access-point
+and then also in the advanced settings, set the IP address to
+10.0.0.202, subnet mask 255.255.255.0
+
 We will setting up the Raspberry Pi to act as a WiFi Access Point, with the following details:
 
 SSID - NSpike
 pw   - IROSIROS
+
+Note - you'll have to set those details in the MQTTFunctions.h file on the Arduino as well
 
 First, do the basic setup and update all the default stuff on your Raspberry Pi. This should happen if you were connected to the internet during setup, but just in case, open a terminal window and run these two commands:
 ```sudo apt update```
