@@ -23,27 +23,23 @@
 // Clock pin only needed for SPI based chipsets when not using hardware SPI
 
 ////////////////////////////////////////////
-// Full boot wedge wiring pin wiring list
+// Jacket LED Wiring
 ///////////////////////////////////////////
-// D1 Mini | LIS3DH | Ultrasonic | LED1 | PowerBoost100C | Battery | Switch |
-// --------|--------|------------|------|----------------|---------|--------|
-//    5V   |  Vin   |     VCC    | Vin  |      5V        | ------- | ------ |
-//    G    |  GND   |     Gnd    | GND  |      GND       | ------- | Pin 1  |
-//    D1   |  SCL   | ---------- | ---- | -------------- | ------- | ------ |
-//    D2   |  SDA   | ---------- | ---- | -------------- | ------- | ------ |
-//    D5   | ------ |    TRIG    | ---- | -------------- | ------- | ------ |
-//    D6   | ------ |    ECHO    | ---- | -------------- | ------- | ------ |
-//    D7   | ------ | ---------- | Din  | -------------- | ------- | ------ |
-// ------- | ------ | ---------- | ---- |      Bat       |  Vout   | ------ |
-// ------- | ------ | ---------- | ---- | -------------- |   GND   | Common |
-// ------- | ------ | ---------- | ---- | -------------- | ------- | ------ |
+// D1 Mini | Pot | LED1 | RaspberryPi |
+// --------|-----|------|-------------|
+//    USB  |-----|------|     USB     |
+//    5V   | Vin | Vin  | ----------- |
+//    G    | GND | GND  | ----------- |
+//    A0   | Out | ---- | ----------- |
+//    D7   | --- | Din  | ----------- |
+
 
 // Our single analog pin is saved for the potentiometer, which is the same for arduino and D1 mini
 #define POT_PIN A0
 
 //LIS3DH I2C
-#define LIS3DH_CLK D1 // D1 on ESP board, SCL on LIS3DH
-#define LIS3DH_MOSI D2 // D2 on ESP board, SDA on LIS3DH
+//#define LIS3DH_CLK D1 // D1 on ESP board, SCL on LIS3DH
+//#define LIS3DH_MOSI D2 // D2 on ESP board, SDA on LIS3DH
 
 // Used for software SPI, LIS3DH communication
 //#define LIS3DH_CLK 14 // D5 on ESP board, SCL on LS3DH
@@ -56,8 +52,8 @@
 #define DATA_PIN D7 // D0 on the ESP board
 
 // Ultrasonic pins
-#define TRIG_PIN D5 // D1 on the ESP board
-#define ECHO_PIN D6 //D2 on the ESP board
+//#define TRIG_PIN D5 // D1 on the ESP board
+//#define ECHO_PIN D6 //D2 on the ESP board
 
 //#define DATA_PIN 12 // D6 on the ESP board
 

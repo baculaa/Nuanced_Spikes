@@ -15,7 +15,8 @@
 #include <AsyncMqttClient.h>
 
 // What channel to listen
-#define MQTT_TOPIC "IROS/hue"
+#define MQTT_DIST_TOPIC "IROS/hue"
+#define MQTT_POT_TOPIC "IROS/pot"
 
 // SSID that the Raspberry Pi is running
 #define WIFI_SSID "NSpike"
@@ -58,7 +59,8 @@ void onWifiDisconnect(const WiFiEventStationModeDisconnected& event) {
 void onMqttConnect(bool sessionPresent) {
   Serial.println("Connected to MQTT.");
   
-  mqttClient.subscribe(MQTT_TOPIC, 0);
+  mqttClient.subscribe(MQTT_DIST_TOPIC, 0);
+  mqttClient.subscribe(MQTT_POT_TOPIC, 0);
 }
 
 void onMqttDisconnect(AsyncMqttClientDisconnectReason reason) {
@@ -87,8 +89,13 @@ void onMqttMessage(char* topic, char* payload, AsyncMqttClientMessageProperties 
   Serial.println("Publish received.");
   Serial.print("  topic: ");
   Serial.println(topic);
-
-  gHue = atoi(payload);
+  if(String(topic) == MQTT_DIST_TOPIC) {
+    gHue = atoi(payload);
+  }
+  else if(String(topic) == MQTT_POT_TOPIC)
+  {
+    pot = atoi(payload);
+  }
 }
 
 void onMqttPublish(uint16_t packetId) {
