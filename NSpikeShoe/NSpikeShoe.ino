@@ -2,7 +2,7 @@
 /// @brief   Get data from an accelerometer and make a chain of LEDs on the shoe respond
 
 // GLOBAL VARIABLES
-uint8_t gHue = 0;
+uint8_t gHue = 10;
 
 #include <FastLED.h>
 #include "pindefs.h"
@@ -18,13 +18,14 @@ uint8_t gHue = 0;
 unsigned long g_timer_0 = 0;
 
 float duration, distance;
-int wait;
+int wait = 100;
 int flag;
 int color;
 int sat;
 int bright;
 int bright2;
 float prev_dist;
+int pot = 30;
 // Cycle for LED blinking
 #define CYCLE_TIME 100
 
@@ -70,7 +71,7 @@ void setup() {
 //Global timers for keeping track of loop things
 //unsigned long g_timer_0 = 0;
 // Cycle for LED blinking
-#define CYCLE_TIME 100
+//#define CYCLE_TIME 100
 
 
 void loop() { 
@@ -83,9 +84,9 @@ void loop() {
     //struct AccelerometerData aData = readAccelerometer();
     struct AccelerometerData aData = currentAccelData;
     
-    Serial.print("X:  "); Serial.print(aData.x);
-    Serial.print("  \tY:  "); Serial.print(aData.y);
-    Serial.print("  \tZ:  "); Serial.println(aData.z);
+//    Serial.print("X:  "); Serial.print(aData.x);
+//    Serial.print("  \tY:  "); Serial.print(aData.y);
+//    Serial.print("  \tZ:  "); Serial.println(aData.z);
 
     // Interpret accelerometer data
     // adding data to running array
@@ -99,20 +100,20 @@ void loop() {
       sum += g_runningAvgArray[i];
     }
     avg = sum / RUNNING_ARRAY_SIZE;
-    Serial.print("Average: ");
-    Serial.println(avg);
+//    Serial.print("Average: ");
+//    Serial.println(avg);
     char buffer [5];
     itoa(avg, buffer, 10);
      mqttClient.publish("IROS/accelerometer", 0, true, buffer);
   }
   // Write LEDs
   ///uint8_t hue = avg / 4; // divided by 4, since we're currently using an analog read that goes 0-1024
-  delay(1000);
+//  delay(1000);
   uint8_t hue = gHue;
-  Serial.print ("gHue: ");
-  Serial.println(gHue, HEX);
-  Serial.print ("Hue: ");
-  Serial.println(hue, HEX);
+//  Serial.print ("gHue: ");
+//  Serial.println(gHue);
+//  Serial.print ("Hue: ");
+//  Serial.println(hue);
 
   // Using hue instead of color, which we get from our mqtt topic! now we gotta set all the leds
   // and do what we wanna do with the stomp bit
@@ -128,29 +129,30 @@ void loop() {
       //delay(100);
         sat = 255;
         bright = 150;
-        if (hue < 50) {
+        if (pot < 50) {
         // Turn our current led back to black for the next loop around
-//        color = 96;
+        color = 96;
+//        Serial.println(color);
         bright2 = 100;
-        leds[whiteLed] = CHSV(hue, sat, bright);
+        leds[whiteLed] = CHSV(color, sat, bright);
         wait = 900;
         }
-        else if (hue < 100) {
-//        color = 64;
+        else if (pot < 100) {
+        color = 64;
         bright2 = 75;
-        leds[whiteLed] = CHSV(hue, sat, bright);
+        leds[whiteLed] = CHSV(color, sat, bright);
         wait = 700;
         }
-        else if (hue < 150) {
-//        color = 40;
+        else if (pot < 150) {
+        color = 40;
         bright2 = 50;
-        leds[whiteLed] = CHSV(hue, sat, bright);
+        leds[whiteLed] = CHSV(color, sat, bright);
         wait = 500;
         }
-        else if (hue < 200) {
-//        color = 20;
+        else if (pot < 200) {
+        color = 20;
         bright2 = 25;
-        leds[whiteLed] = CHSV(hue, sat, bright);
+        leds[whiteLed] = CHSV(color, sat, bright);
         wait = 300;
         }
         else{
@@ -159,9 +161,11 @@ void loop() {
           leds[whiteLed] = CHSV(color, sat, bright);
           wait = 100;
         }
+//        Serial.print("LED loop: ");
+//      Serial.println(color);
       }
-  FastLED.show();
-  delay(wait);
+//  FastLED.show();
+//  delay(wait);
 //  // Turn the LED on and off on a 1 second cycle
 //  if (g_timer_0 >= millis() + CYCLE_TIME / 2){
 //    leds[0]= CHSV( hue, 255, 50);
@@ -177,16 +181,20 @@ void loop() {
 //    g_timer_0 = millis() + CYCLE_TIME;
 //  }
 
+//      Serial.println(color);
+//      Serial.println(wait);
+      FastLED.show();
+      delay(wait);
 
-
-
-       if (hue > 99){
+       if (hue < 99){
         
 //          if (abs(distance-prev_dist) < 55){
-            Serial.print("Distance dif: ");
-            Serial.println(distance);
+//            Serial.print("Distance: ");
+//            Serial.println(hue);
             for(int whiteLed = 0; whiteLed < NUM_LEDS; whiteLed = whiteLed + 1) {
-            leds[whiteLed] = CHSV(hue, sat, bright2);
+//              Serial.print("Flash loop: ");
+//            Serial.println(whiteLed);
+            leds[whiteLed] = CHSV(color, sat, bright2);
             } 
 //        }
        }
@@ -196,14 +204,14 @@ void loop() {
 //        Serial.print("Here");
         for(int whiteLed = 0; whiteLed < NUM_LEDS; whiteLed = whiteLed + 1) {
          bright = 255;
-         leds[whiteLed] = CHSV(hue, sat, bright); 
+         leds[whiteLed] = CHSV(color, sat, bright); 
         }
          wait = 100;
       }
       FastLED.show();
       delay(wait);
-      Serial.print("Brightness: ");
-      Serial.println(bright);
+//      Serial.print("Brightness: ");
+//      Serial.println(bright);
       prev_dist = distance;
       
    }

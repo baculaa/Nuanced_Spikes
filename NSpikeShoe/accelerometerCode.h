@@ -15,10 +15,11 @@ struct AccelerometerData {
   int y;
   int z;
 };
-
+AccelerometerData currentAccelData;
 void setupAccelerometer();
 bool haveNewAccelData();
 //AccelerometerData readAccelerometer();
+
 
 // SPI accelerometer sensor
 //Adafruit_LIS3DH lis = Adafruit_LIS3DH(LIS3DH_CS, LIS3DH_MOSI, LIS3DH_MISO, LIS3DH_CLK);

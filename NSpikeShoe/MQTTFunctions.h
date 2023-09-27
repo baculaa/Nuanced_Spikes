@@ -18,11 +18,13 @@
 #define MQTT_TOPIC "IROS/hue"
 
 // SSID that the Raspberry Pi is running
-#define WIFI_SSID "Chatham"
-#define WIFI_PASSWORD "almostahellphone"
+#define WIFI_SSID "NSpike"
+#define WIFI_PASSWORD "IROSIROS"
+//#define WIFI_SSID "Clowns"
+//#define WIFI_PASSWORD "deadp00l"
 
 // IP address for the Raspberry Pi
-#define MQTT_HOST IPAddress(10, 0, 0, 202)
+#define MQTT_HOST IPAddress(192, 168, 4, 1)
 #define MQTT_PORT 1883
 
 AsyncMqttClient mqttClient;
@@ -109,6 +111,7 @@ void setupMQTT() {
   mqttClient.setServer(MQTT_HOST, MQTT_PORT);
 
   connectToWifi();
+//  connectToMqtt();
 
 }
 
