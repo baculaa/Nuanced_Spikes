@@ -66,6 +66,8 @@ LED control is impletemented through the [FastLED](https://fastled.io/) package.
 
 We're also using MQTT for passing data between the pi and D1 minis.
 
+If problems uploading to D1 Mini, reinstall the CH340 driver from [here](https://sparks.gogo.co.nz/ch340.html)
+
 
 ### Jacket
 #### Bill of Materials

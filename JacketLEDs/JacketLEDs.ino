@@ -4,6 +4,8 @@
 // GLOBAL VARIABLES
 uint8_t gHue = 10;
 
+#define FASTLED_INTERRUPT_RETRY_COUNT 100
+
 #include <FastLED.h>
 #include "pindefs.h"
 #include "MQTTFunctions.h"

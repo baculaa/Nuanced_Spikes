@@ -29,17 +29,17 @@ Adafruit_LIS3DH lis = Adafruit_LIS3DH();
 void setupAccelerometer(){
   //if (ANALOG_ACCELEROMETER != 1){
     if (! lis.begin(0x18)) {   // change this to 0x19 for alternative i2c address
-      Serial.println("Couldnt start I2C accelerometer, defaulting to analog read");
+      //Serial.println("Couldnt start I2C accelerometer, defaulting to analog read");
       //ANALOG_ACCELEROMETER = 1;
       while (1) yield();
     }
     else{
-      Serial.println("LIS3DH found!");
+      //Serial.println("LIS3DH found!");
       
       lis.setRange(LIS3DH_RANGE_2_G);   // 2, 4, 8 or 16 G!
       
-      Serial.print("Range = "); Serial.print(2 << lis.getRange());  
-      Serial.println("G");
+      //Serial.print("Range = "); //Serial.print(2 << lis.getRange());  
+      //Serial.println("G");
     }
   //}
 }
