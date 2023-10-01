@@ -1,6 +1,22 @@
 #ifndef UDP_FUNCTIONS_H
 #define UDP_FUNCTIONS_H
 
+//packet structure, 3 characters long, check that our data starts with the start character, comma splits
+// start character
+// S
+// Mood (0) or distance (1)
+// 0
+// Value (0-3 for mood, 0-1 for distance)
+// 0
+
+// distance value 0 is no person, 1 is person
+
+// So example:
+// S00
+// S01
+// S10
+
+
 #include <ESP8266WiFi.h>
 #include <Ticker.h>
 //#include <AsyncMqttClient.h>
@@ -19,11 +35,11 @@ WiFiEventHandler wifiDisconnectHandler;
 Ticker wifiReconnectTimer;
 WiFiUDP Udp;
 unsigned int localUdpPort = 4210;
-char incomingPacket[256];
-char replyPacket[] = "Hi there! Got the message :-)";
+char incomingPacket[3];
+//char replyPacket[] = "Hi there! Got the message :-)";
 
-uint8_t distance = 10;
-uint8_t pot_val = 10;
+uint8_t distance = 0;
+uint8_t pot_state = 0;
 
 void connectToWifi() {
   //Serial.println("Connecting to Wi-Fi...");
@@ -66,17 +82,40 @@ void checkPacketContent()
   {
     // receive incoming UDP packets
     //Serial.printf("Received %d bytes from %s, port %d\n", packetSize, Udp.remoteIP().toString().c_str(), Udp.remotePort());
-    int len = Udp.read(incomingPacket, 255);
+    int len = Udp.read(incomingPacket, 4);
     if (len > 0)
     {
+      // bad packet? maybe just return?
       incomingPacket[len] = 0;
     }
     //Serial.printf("UDP packet contents: %s\n", incomingPacket);
+    if(incomingPacket[0] != "S")
+    {
+      // not a good packet, ignore it
+      return;
+    }
+    int which_var = atoi(incomingPacket[1])
+    int which_state = atoi(incomingPacket[2])
+
+    // if it's not zero, we're gonna assume it's distance
+    if(which_var)
+    {
+      distance = which_state;
+    }
+    // Otherwise it's for the potentiometer
+    else
+    {
+      pot_state = which_state;
+    }
+
+
+    //if(incomingPacket[1] )
+
 
     // send back a reply, to the IP address and port we got the packet from
-    Udp.beginPacket(Udp.remoteIP(), Udp.remotePort());
-    Udp.write(replyPacket);
-    Udp.endPacket();
+    //Udp.beginPacket(Udp.remoteIP(), Udp.remotePort());
+    //Udp.write(replyPacket);
+    //Udp.endPacket();
 }
 }
 
