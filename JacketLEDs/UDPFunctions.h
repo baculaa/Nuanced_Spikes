@@ -74,6 +74,15 @@ void udpSetup()
   //Serial.printf("Now listening at IP %s, UDP port %d\n", WiFi.localIP().toString().c_str(), localUdpPort);
 }
 
+void sendPotentiometerData(char cPot)
+{
+  // send back a reply, to the IP address and port we got the packet from
+  char potPacket[] = {'S', '0', cPot};
+  Udp.beginPacket(MQTT_HOST, MQTT_PORT);
+  Udp.write(potPacket);
+  Udp.endPacket();
+}
+
 void checkPacketContent()
 {
   if( WiFi.status() != WL_CONNECTED) { return; }
@@ -107,11 +116,6 @@ void checkPacketContent()
     {
       pot_state = which_state;
     }
-
-
-    //if(incomingPacket[1] )
-
-
     // send back a reply, to the IP address and port we got the packet from
     //Udp.beginPacket(Udp.remoteIP(), Udp.remotePort());
     //Udp.write(replyPacket);

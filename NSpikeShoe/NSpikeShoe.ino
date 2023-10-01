@@ -86,117 +86,101 @@ void loop() {
   //uint32_t avg = 0;
   haveNewAccelData();
   checkPacketContent();
-  // if (haveNewAccelData()) {
-  //   //if (shouldWeReadAccelerometer(ACCELEROMETER_READ_PERIOD)){
-  //   //struct AccelerometerData aData = readAccelerometer();
-  //   struct AccelerometerData aData = currentAccelData;
 
-  //   //    //Serial.print("X:  "); //Serial.print(aData.x);
-  //   //    //Serial.print("  \tY:  "); //Serial.print(aData.y);
-  //   //    //Serial.print("  \tZ:  "); //Serial.println(aData.z);
-
-  //   // Interpret accelerometer data
-  //   // adding data to running array
-  //   g_runningAvgArray[g_runningIndex] = aData.z;
-  //   g_runningIndex++;
-  //   if (g_runningIndex >= RUNNING_ARRAY_SIZE) {
-  //     g_runningIndex = 0;
-  //   }
-  //   uint32_t sum = 0;
-  //   for (int i = 0; i < RUNNING_ARRAY_SIZE; i++) {
-  //     sum += g_runningAvgArray[i];
-  //   }
-  //   avg = sum / RUNNING_ARRAY_SIZE;
-  //   //    //Serial.print("Average: ");
-  //   //    //Serial.println(avg);
-  //   char buffer[5];
-  //   itoa(avg, buffer, 10);
-  //   //mqttClient.publish("IROS/accelerometer", 0, true, buffer);
-  // }
-  // Write LEDs
-  ///uint8_t hue = avg / 4; // divided by 4, since we're currently using an analog read that goes 0-1024
-  //  delay(1000);
-  //uint8_t hue = gHue;
-  //uint8_t pot = gpot;
-  //  //Serial.print ("gHue: ");
-  //  //Serial.println(gHue);
-  //  //Serial.print ("Hue: ");
-  //  //Serial.println(hue);
-
-  // Using hue instead of color, which we get from our mqtt topic! now we gotta set all the leds
-  // and do what we wanna do with the stomp bit
-
-  for (int whiteLed = 0; whiteLed < NUM_LEDS; whiteLed = whiteLed + 1) {
-    // Turn our current led on to white, then show the leds
-    //      leds[whiteLed] = CRGB::Violet;
-
-    // Show the leds (only one of which is set to white, from above)
-
-
-    // Wait a little bit
-    //delay(100);
-    sat = 255;
-    bright = 150;
-    // if (pot < 50) {
-    if (pot_state == 0) {
-      // Turn our current led back to black for the next loop around
-      color = 96;
-      //        //Serial.println(color);
-      bright2 = 100;
+  sat = 255;
+  bright = 150;
+  if (pot_state == '0') {
+    color = 96;
+    bright2 = 100;
+    wait = 900;
+    for(int whiteLed = 0; whiteLed < NUM_LEDS; whiteLed = whiteLed + 1) {
       leds[whiteLed] = CHSV(color, sat, bright);
-      wait = 900;
-    // } else if (pot < 100) {
-    } else if (pot_state == 1) {
-      color = 64;
-      bright2 = 75;
-      leds[whiteLed] = CHSV(color, sat, bright);
-      wait = 700;
-    // } else if (pot < 150) {
-    } else if (pot_state == 2) {
-      color = 40;
-      bright2 = 50;
-      leds[whiteLed] = CHSV(color, sat, bright);
-      wait = 500;
-    // } else if (pot < 200) {
-    } else if (pot_state == 3) {
-      color = 20;
-      bright2 = 25;
-      leds[whiteLed] = CHSV(color, sat, bright);
-      wait = 300;
-    } else {
-      color = 0;
-      bright2 = 0;
-      leds[whiteLed] = CHSV(color, sat, bright);
-      wait = 100;
     }
+  } else if (pot_state == '1') {
+    color = 64;
+    bright2 = 75;
+    wait = 700;
+    for(int whiteLed = 0; whiteLed < NUM_LEDS; whiteLed = whiteLed + 1) {
+    leds[whiteLed] = CHSV(color, sat, bright);
+    }
+  } else if (pot_state == '2') {
+    color = 40;
+    bright2 = 50;
+    wait = 500;
+    for(int whiteLed = 0; whiteLed < NUM_LEDS; whiteLed = whiteLed + 1) {
+      leds[whiteLed] = CHSV(color, sat, bright);
+    }
+  }
+  else if (pot_state == '3') {
+    color = 20;
+    bright2 = 25;
+    wait = 300;
+    for(int whiteLed = 0; whiteLed < NUM_LEDS; whiteLed = whiteLed + 1) {
+      leds[whiteLed] = CHSV(color, sat, bright);
+    }
+  }
+  else{
+    color = 0;
+    bright2 = 0;
+    wait = 100;
+    for(int whiteLed = 0; whiteLed < NUM_LEDS; whiteLed = whiteLed + 1) {
+      leds[whiteLed] = CHSV(color, sat, bright);
+    }
+  }
+
+//  for (int whiteLed = 0; whiteLed < NUM_LEDS; whiteLed = whiteLed + 1) {
+//    // Turn our current led on to white, then show the leds
+//    //      leds[whiteLed] = CRGB::Violet;
+//
+//    // Show the leds (only one of which is set to white, from above)
+//
+//
+//    // Wait a little bit
+//    //delay(100);
+//    sat = 255;
+//    bright = 150;
+//    // if (pot < 50) {
+//    if (pot_state == '0') {
+//      // Turn our current led back to black for the next loop around
+//      color = 96;
+//      //        //Serial.println(color);
+//      bright2 = 100;
+//      leds[whiteLed] = CHSV(color, sat, bright);
+//      wait = 900;
+//    // } else if (pot < 100) {
+//    } else if (pot_state == '1') {
+//      color = 64;
+//      bright2 = 75;
+//      leds[whiteLed] = CHSV(color, sat, bright);
+//      wait = 700;
+//    // } else if (pot < 150) {
+//    } else if (pot_state == '2') {
+//      color = 40;
+//      bright2 = 50;
+//      leds[whiteLed] = CHSV(color, sat, bright);
+//      wait = 500;
+//    // } else if (pot < 200) {
+//    } else if (pot_state == '3') {
+//      color = 20;
+//      bright2 = 25;
+//      leds[whiteLed] = CHSV(color, sat, bright);
+//      wait = 300;
+//    } else {
+//      color = 0;
+//      bright2 = 0;
+//      leds[whiteLed] = CHSV(color, sat, bright);
+//      wait = 100;
+//    }
     //        //Serial.print("LED loop: ");
     //      //Serial.println(color);
-  }
-  //  FastLED.show();
-  //  delay(wait);
-  //  // Turn the LED on and off on a 1 second cycle
-  //  if (g_timer_0 >= millis() + CYCLE_TIME / 2){
-  //    leds[0]= CHSV( hue, 255, 50);
-  //    FastLED.show();
-  //    digitalWrite(13, HIGH);
-  //  }
-  //  else if (g_timer_0 >= millis()){
-  //    digitalWrite(13, LOW);
-  //    leds[0]= CHSV( hue, 255, 50);
-  //    FastLED.show();
-  //  }
-  //  else {
-  //    g_timer_0 = millis() + CYCLE_TIME;
-  //  }
+  //}
 
-  //      //Serial.println(color);
-  //      //Serial.println(wait);
   FastLED.show();
   delay(wait);
 
   // If a person is here, blink
   // if (hue < 99) {
-  if (distance == 1) {
+  if (distance == '1') {
 
     //          if (abs(distance-prev_dist) < 55){
     //            //Serial.print("Distance: ");
