@@ -67,6 +67,12 @@ class UDPClient(object):
             if returnMsg == "hello!":
                 return data[1][0]
 
+    def send_has_person(self, has_person):
+        if has_person:
+            self.broadcast_send('S11', 4210)
+        else:
+            self.broadcast_send('S10', 4210)
+
     def broadcast_send(self, message, comm_port):
         msg = message.encode('utf_8','strict')
         #sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM, socket.IPPROTO_UDP)
