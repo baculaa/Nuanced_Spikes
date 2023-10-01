@@ -60,6 +60,7 @@ void udpSetup()
 
 void checkPacketContent()
 {
+  if( WiFi.status() != WL_CONNECTED) { return; }
   int packetSize = Udp.parsePacket();
   if (packetSize)
   {
