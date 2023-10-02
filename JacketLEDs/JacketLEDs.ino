@@ -30,12 +30,12 @@ CRGB leds[NUM_LEDS];
 
 
 void setup() { 
-  #ifndef ESP8266
-    while (!Serial) yield();     // will pause Zero, Leonardo, etc until serial console opens
-  #endif
-
-  Serial.begin(115200);
-  Serial.println("Starting up...");
+//  #ifndef ESP8266
+//    while (!Serial) yield();     // will pause Zero, Leonardo, etc until serial console opens
+//  #endif
+//
+//  Serial.begin(115200);
+//  Serial.println("Starting up...");
 
   // Set up LEDs
   FastLED.addLeds<NEOPIXEL, DATA_PIN>(leds, NUM_LEDS);
@@ -57,24 +57,27 @@ void loop() {
 
   sat = 255;
   bright = 150;
-  if (pot < 50) {
+  if (pot < 200) {
     // Send UDP for Pot == 0
+    sendPotentiometerData('0');
     color = 96;
     bright2 = 100;
     wait = 900;
     for(int whiteLed = 0; whiteLed < NUM_LEDS; whiteLed = whiteLed + 1) {
       leds[whiteLed] = CHSV(color, sat, bright);
     }
-  } else if (pot < 100) {
+  } else if (pot < 400) {
     // Send UDP for Pot == 1
+    sendPotentiometerData('1');
     color = 64;
     bright2 = 75;
     wait = 700;
     for(int whiteLed = 0; whiteLed < NUM_LEDS; whiteLed = whiteLed + 1) {
     leds[whiteLed] = CHSV(color, sat, bright);
     }
-  } else if (pot < 150) {
+  } else if (pot < 600) {
     // Send UDP for Pot == 2
+    sendPotentiometerData('2');
     color = 40;
     bright2 = 50;
     wait = 500;
@@ -82,8 +85,9 @@ void loop() {
       leds[whiteLed] = CHSV(color, sat, bright);
     }
   }
-  else if (pot < 200) {
+  else if (pot < 800) {
     // Send UDP for Pot == 3
+    sendPotentiometerData('3');
     color = 20;
     bright2 = 25;
     wait = 300;
@@ -93,6 +97,7 @@ void loop() {
   }
   else{
     // Send UDP for Pot == 4
+    sendPotentiometerData('4');
     color = 0;
     bright2 = 0;
     wait = 100;
@@ -110,10 +115,11 @@ void loop() {
    if (distance == '1'){
         for(int whiteLed = 0; whiteLed < NUM_LEDS; whiteLed = whiteLed + 1) {
         leds[whiteLed] = CHSV(color, sat, bright2);
-        } 
+        }
+        FastLED.show();
+   delay(wait); 
    }
-   FastLED.show();
-   delay(wait);
+   
   // Serial.print("Brightness: ");
   // Serial.println(bright);  
 }

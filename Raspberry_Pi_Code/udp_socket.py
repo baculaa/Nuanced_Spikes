@@ -50,10 +50,11 @@ class UDPClient(object):
         return recievedData
 
     def pass_on_pot(self):
-        data = self.get_message()
-        self.packet = data[0].decode()
-        if self.packet[1] == '0':
-            broadcast_send(self.packet, 4210)
+        try:
+            data = self.get_message()
+            self.packet = data[0].decode()
+            if self.packet[1] == '0':
+                broadcast_send(self.packet, 4210)
 
     def get_server_ip(self, comm_port):
         hello_request = "hello?"

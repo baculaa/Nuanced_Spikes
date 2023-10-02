@@ -51,12 +51,12 @@ CRGB leds[NUM_LEDS];
 // uint16_t g_runningIndex = 0;
 
 void setup() {
-//#ifndef ESP8266
-//  while (!Serial) yield();  // will pause Zero, Leonardo, etc until serial console opens
-//#endif
+#ifndef ESP8266
+  while (!Serial) yield();  // will pause Zero, Leonardo, etc until serial console opens
+#endif
 
-  //Serial.begin(300);
-  //Serial.println("Starting up...");
+  Serial.begin(115200);
+  Serial.println("Starting up...");
 
   setupAccelerometer();
 
@@ -190,10 +190,14 @@ void loop() {
       //            //Serial.println(whiteLed);
       leds[whiteLed] = CHSV(color, sat, bright2);
     }
+    FastLED.show();
+  delay(wait);
     //        }
   }
   /// AND BLINK AT FIXED RATE FOR STOMP
   struct AccelerometerData aData = currentAccelData;
+  //float rms = sqrt(aData.x^2 + aData.y^2 + aData.z^2);
+  //Serial.println(String(rms));
   if (aData.z > 10) {
     //        //Serial.print("Here");
     for (int whiteLed = 0; whiteLed < NUM_LEDS; whiteLed = whiteLed + 1) {
@@ -201,9 +205,10 @@ void loop() {
       leds[whiteLed] = CHSV(color, sat, bright);
     }
     wait = 100;
-  }
-  FastLED.show();
+    FastLED.show();
   delay(wait);
+  }
+  
   //      //Serial.print("Brightness: ");
   //      //Serial.println(bright);
   //prev_dist = distance;

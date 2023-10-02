@@ -81,14 +81,14 @@ void checkPacketContent()
   if (packetSize)
   {
     // receive incoming UDP packets
-    //Serial.printf("Received %d bytes from %s, port %d\n", packetSize, Udp.remoteIP().toString().c_str(), Udp.remotePort());
+    Serial.printf("Received %d bytes from %s, port %d\n", packetSize, Udp.remoteIP().toString().c_str(), Udp.remotePort());
     int len = Udp.read(incomingPacket, 3);
     if (len > 0)
     {
       // bad packet? maybe just return?
       incomingPacket[len] = 0;
     }
-    //Serial.printf("UDP packet contents: %s\n", incomingPacket);
+    Serial.printf("UDP packet contents: %s\n", incomingPacket);
     if (incomingPacket[0] != 'S')
     {
       // not a good packet, ignore it
