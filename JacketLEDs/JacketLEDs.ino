@@ -54,6 +54,8 @@ void setup() {
 void loop() { 
   // Read analog pin data
   pot = analogRead(POT_PIN);
+//  Serial.print("Pot value: ");
+//  Serial.println(pot);
 
   sat = 255;
   bright = 150;
@@ -64,7 +66,7 @@ void loop() {
     bright2 = 100;
     wait = 900;
     for(int whiteLed = 0; whiteLed < NUM_LEDS; whiteLed = whiteLed + 1) {
-      leds[whiteLed] = CHSV(color, sat, bright);
+      leds[whiteLed] = CRGB::Green; //CHSV(color, sat, bright);
     }
   } else if (pot < 400) {
     // Send UDP for Pot == 1
@@ -73,7 +75,7 @@ void loop() {
     bright2 = 75;
     wait = 700;
     for(int whiteLed = 0; whiteLed < NUM_LEDS; whiteLed = whiteLed + 1) {
-    leds[whiteLed] = CHSV(color, sat, bright);
+    leds[whiteLed] = CRGB::Yellow; //CHSV(color, sat, bright);
     }
   } else if (pot < 600) {
     // Send UDP for Pot == 2
@@ -82,7 +84,7 @@ void loop() {
     bright2 = 50;
     wait = 500;
     for(int whiteLed = 0; whiteLed < NUM_LEDS; whiteLed = whiteLed + 1) {
-      leds[whiteLed] = CHSV(color, sat, bright);
+      leds[whiteLed] = CRGB::Orange;//CHSV(color, sat, bright);
     }
   }
   else if (pot < 800) {
@@ -92,7 +94,7 @@ void loop() {
     bright2 = 25;
     wait = 300;
     for(int whiteLed = 0; whiteLed < NUM_LEDS; whiteLed = whiteLed + 1) {
-      leds[whiteLed] = CHSV(color, sat, bright);
+      leds[whiteLed] = CRGB::OrangeRed; //CHSV(color, sat, bright);
     }
   }
   else{
@@ -102,7 +104,7 @@ void loop() {
     bright2 = 0;
     wait = 100;
     for(int whiteLed = 0; whiteLed < NUM_LEDS; whiteLed = whiteLed + 1) {
-      leds[whiteLed] = CHSV(color, sat, bright);
+      leds[whiteLed] = CRGB::Red;//CHSV(color, sat, bright);
     }
   }
   // Serial.print("LED loop: ");

@@ -51,12 +51,12 @@ CRGB leds[NUM_LEDS];
 // uint16_t g_runningIndex = 0;
 
 void setup() {
-#ifndef ESP8266
-  while (!Serial) yield();  // will pause Zero, Leonardo, etc until serial console opens
-#endif
-
-  Serial.begin(115200);
-  Serial.println("Starting up...");
+//#ifndef ESP8266
+//  while (!Serial) yield();  // will pause Zero, Leonardo, etc until serial console opens
+//#endif
+//
+//  Serial.begin(115200);
+//  Serial.println("Starting up...");
 
   setupAccelerometer();
 
@@ -86,6 +86,8 @@ void loop() {
   //uint32_t avg = 0;
   haveNewAccelData();
   checkPacketContent();
+//  Serial.print("Pot state: ");
+//  Serial.println(pot_state);
 
   sat = 255;
   bright = 150;
@@ -190,8 +192,8 @@ void loop() {
       //            //Serial.println(whiteLed);
       leds[whiteLed] = CHSV(color, sat, bright2);
     }
-    FastLED.show();
-  delay(wait);
+//    FastLED.show();
+//  delay(wait);
     //        }
   }
   /// AND BLINK AT FIXED RATE FOR STOMP
@@ -205,13 +207,14 @@ void loop() {
       leds[whiteLed] = CHSV(color, sat, bright);
     }
     wait = 100;
-    FastLED.show();
-  delay(wait);
+    
   }
   
   //      //Serial.print("Brightness: ");
   //      //Serial.println(bright);
   //prev_dist = distance;
+  FastLED.show();
+  delay(wait);
 }
 
 unsigned long g_accel_timer = 0;
